@@ -1,0 +1,39 @@
+# Documentos locais / rascunhos
+PROJETO.md
+
+# Laravel / PHP / Composer
+/vendor
+_ide_helper.php
+.phpunit.result.cache
+/.phpunit.cache
+.phpactor.json
+/auth.json
+Homestead.json
+Homestead.yaml
+/storage/*.key
+/storage/pail
+
+# Frontend & Builds
+/node_modules
+/public/build
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+
+# Variáveis de Ambiente & Logs
+.env
+.env.backup
+.env.production
+*.log
+
+# IDEs & Editores
+/.vscode
+/.idea
+/.cursor/
+/.codex
+/.nova
+/.zed
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
