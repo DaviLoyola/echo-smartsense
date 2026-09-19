@@ -4,8 +4,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Echo - Inteligência que faz o campo fluir</title>
+    <title>ECHO - Tecnologia que conecta, inovação que transforma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.min.css">
+    <style>
+        body.landing-page,
+        body.landing-page * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body.landing-page .hero-brand {
+            display: block;
+            color: #ffffff;
+            font-size: 1.25em;
+            letter-spacing: 0.12em;
+            text-shadow: 0 4px 24px rgba(0, 168, 150, 0.45);
+        }
+
+        body.landing-page .hero-tagline {
+            display: block;
+            font-size: 0.72em;
+            letter-spacing: -0.5px;
+        }
+
+        body.landing-page .btn-pulse {
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+        }
+
+        body.landing-page .btn-pulse:hover,
+        body.landing-page .btn-pulse:focus-visible {
+            background-color: #008f80 !important;
+            border-color: #008f80 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        body.landing-page .modules-section {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        body.landing-page .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 40px auto 0;
+        }
+
+        body.landing-page .module-card {
+            padding: 32px 24px 24px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 12px 30px rgba(15, 76, 129, 0.08);
+        }
+
+        body.landing-page .module-card h3 {
+            margin: 0 0 8px;
+            color: #0f4c81;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        body.landing-page .module-card p {
+            min-height: 48px;
+            margin: 0 0 24px;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        body.landing-page .module-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1.35;
+            border: 1px dashed #94a3b8;
+            border-radius: 12px;
+            background: #f8fafc;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        body.landing-page .module-card.module-hydro h3 {
+            color: #1479b8;
+        }
+
+        @media (max-width: 768px) {
+            body.landing-page .modules-grid {
+                grid-template-columns: 1fr;
+                max-width: 440px;
+            }
+        }
+    </style>
 </head>
 
 <script>
@@ -57,8 +156,7 @@
     <section class="hero animate-fade-in">
         <div class="hero-container">
             <div class="hero-tag animate-slide-up">Ecossistema IoT de Monitoramento de Bombas</div>
-            <h1 class="animate-slide-up delay-1">Echo: <span class="gradient-text-hero">Inteligência que faz o campo
-                    fluir</span></h1>
+            <h1 class="animate-slide-up delay-1"><span class="hero-brand">ECHO</span><span class="hero-tagline">Tecnologia que conecta, inovação que transforma</span></h1>
             <p class="animate-slide-up delay-2">Aumente em até <strong>35% a Vida Útil do Equipamento</strong> e <strong>economize com Auditoria,
                 Relatórios Técnicos e </strong> com a gestão automatizada.</p>
 
@@ -189,6 +287,30 @@
                 <p>Monitoramento hidráulico integrado para evitar o desgaste do selo mecânico por falta de água.</p>
                 <button class="btn-pulse" onclick="openModal('modal-sensores')">Como?</button>
             </div>
+        </div>
+    </section>
+
+    <section id="modulos" class="section modules-section">
+        <div class="section-tag scroll-animate">NOSSA TECNOLOGIA</div>
+        <h2 class="section-title-gradient scroll-animate">Nossos Módulos</h2>
+        <p class="section-subtitle scroll-animate">Soluções especializadas para uma visão completa da operação.</p>
+
+        <div class="modules-grid scroll-animate">
+            <article class="module-card">
+                <h3>mechSense</h3>
+                <p>Monitoramento Mecânico Avançado</p>
+                <div class="module-placeholder" aria-label="Espaço reservado para imagem 3D do mechSense">Imagem 3D</div>
+            </article>
+            <article class="module-card">
+                <h3>PowerSense</h3>
+                <p>Gestão e Diagnóstico Elétrico Integral</p>
+                <div class="module-placeholder" aria-label="Espaço reservado para imagem 3D do PowerSense">Imagem 3D</div>
+            </article>
+            <article class="module-card module-hydro">
+                <h3>HydroSense</h3>
+                <p>Controle Hidráulico Automatizado (Identidade Visual Azul)</p>
+                <div class="module-placeholder" aria-label="Espaço reservado para imagem 3D do HydroSense">Imagem 3D</div>
+            </article>
         </div>
     </section>
 
@@ -340,9 +462,7 @@
         <div class="modal-content">
             
             <h3>Telemetria Multissensorial</h3>
-            <p>O sistema realiza a leitura contínua de parâmetros cruciais como <strong>corrente (A)</strong>, <strong>tensão (V)</strong>,
-                 <strong>vibração</strong> e <strong>temperatura</strong> da carcaça. O cruzamento instantâneo desses dados permite mapear o comportamento exato do equipamento,
-                  identificando sobrecargas elétricas, desequilíbrio de fases ou falhas de rolamento bem antes que o motor sofra uma pane definitiva.</p>
+              <p>Exibe o painel com os dados consolidados das grandezas elétricas, térmicas e mecânicas capturadas em tempo real.</p>
         </div>
     </div>
 
@@ -350,9 +470,7 @@
         <div class="modal-content">
             
             <h3>Corte Crítico Automatizado</h3>
-            <p>Através de uma tabela de <strong>limites customizáveis</strong>, o hardware atua diretamente no painel elétrico da motobomba.
-                 Caso o sensor registre picos perigosos de temperatura ou variações severas na rede elétrica, o comando de desligamento de emergência
-                  é acionado de forma autônoma na ponta, evitando o derretimento das bobinas ou danos estruturais graves.</p>
+              <p>Mostra o histórico de alertas e os parâmetros exatos que acionam a interrupção automática por segurança.</p>
         </div>
     </div>
 
@@ -360,9 +478,7 @@
         <div class="modal-content">
             
             <h3>Detecção de Trabalho a Seco</h3>
-            <p>Através de uma tabela de <strong>limites customizáveis</strong>, o hardware atua diretamente no painel elétrico da motobomba.
-                 Caso o sensor registre picos perigosos de temperatura ou variações severas na rede elétrica, o comando de desligamento de emergência
-                  é acionado de forma autônoma na ponta, evitando o derretimento das bobinas ou danos estruturais graves.</p>
+              <p>Explica o método de monitoramento hidráulico utilizado para proteger o selo mecânico contra a falta de água.</p>
         </div>
     </div>
 
@@ -404,6 +520,21 @@
     </div>
 
     <script src="assets/javascript/script.min.js"></script>
+    <script>
+        window.openModal = function (modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeModal = function (modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+    </script>
 </body>
 
 </html>

@@ -51,15 +51,15 @@ if (document.querySelector('body.landing-page')) {
         else navbar.classList.remove('scrolled');
     });
 
-    function openModal(modalId) {
+    window.openModal = function (modalId) {
         document.getElementById(modalId).classList.add('active');
         document.body.style.overflow = 'hidden';
-    }
+    };
 
-    function closeModal(modalId) {
+    window.closeModal = function (modalId) {
         document.getElementById(modalId).classList.remove('active');
         document.body.style.overflow = 'auto';
-    }
+    };
 
     window.onclick = function (event) {
         if (event.target.classList.contains('modal-overlay')) {
