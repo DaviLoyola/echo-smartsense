@@ -90,6 +90,6 @@
     </div>
 </main>
 
-<script defer src="/assets/javascript/script.min.js"></script>
+<script defer src="/assets/javascript/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection

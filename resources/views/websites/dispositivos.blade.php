@@ -17,31 +17,6 @@
     </header>
 
     <div id="painel-content">
-    
-        <div style="margin-bottom: 20px; padding: 15px; background: rgba(45, 127, 249, 0.05); border: 1px solid #2d7ff9; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-    <div>
-        <h4 style="margin: 0; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-            Conexão USB Direta
-        </h4>
-        <small style="color: var(--gray--900);">Transmita os dados do Arduino vinculando-o a uma motobomba específica.</small>
-    </div>
-    
-    <div style="display: flex; gap: 10px; align-items: center;">
-        <select id="selectDispositivoSerial" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; color: #334155; font-weight: 500; outline: none; cursor: pointer;">
-            <option value="" disabled selected>1º Selecione a Motobomba...</option>
-            @foreach($dispositivos as $bomba)
-                <option value="{{ $bomba->id }}">{{ $bomba->nome }} (ID: {{ $bomba->id }})</option>
-            @endforeach
-        </select>
-
-        <span id="serialStatus" style="font-size: 13px; font-weight: bold; color: #f59e0b;">Desconectado</span>
-        
-        <button id="btnConnectSerial" class="btn" style="background: #2d7ff9; color: white; padding: 8px 15px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold;">
-            2º Conectar USB
-        </button>
-    </div>
-</div>
-
         <div class="stats-grid">
             <div class="stat-card">
                 <div>
@@ -159,6 +134,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-<script src="/assets/javascript/script.min.js"></script>
+<script src="/assets/javascript/script.js"></script>
 
 @endsection

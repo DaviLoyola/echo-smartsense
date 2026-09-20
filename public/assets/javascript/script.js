@@ -1,6 +1,6 @@
 /* ============================================================
-   AGROECHO – JAVASCRIPT UNIFICADO (APENAS FRONTEND & UX)
-   ============================================================ 
+   ECHO SMARTSENSE – JAVASCRIPT UNIFICADO (FRONTEND & UX)
+   ============================================================ */
 
 // ----- 1. TEMA GLOBAL (DARK / LIGHT MODE) -----
 let theme = localStorage.getItem('agroecho_theme') || 'light';
@@ -261,7 +261,8 @@ window.openChartModal = function(bombaId, bombaNome) {
         modal.style.display = 'flex';
         
         fetchChartData();
-        realTimeInterval = setInterval(fetchChartData, 1000);
+        // Polling a cada 3 segundos conforme ADR #6
+        realTimeInterval = setInterval(fetchChartData, 3000);
     }
 }
 
@@ -378,104 +379,3 @@ window.renderChart = function() {
         });
     }
 }
-
-// ============================================================
-// COMUNICAÇÃO SERIAL WEB (Cabo USB -> Navegador -> Banco de Dados)
-// ============================================================
-const btnConnectSerial = document.getElementById('btnConnectSerial');
-const selectDispositivo = document.getElementById('selectDispositivoSerial');
-
-if (btnConnectSerial) {
-    btnConnectSerial.addEventListener('click', async () => {
-        // 1. Valida se o usuário escolheu uma bomba
-        if (!selectDispositivo.value) {
-            alert("Por favor, selecione uma Motobomba no menu antes de conectar o cabo USB.");
-            return;
-        }
-
-        const serialStatus = document.getElementById('serialStatus');
-
-        if (!("serial" in navigator)) {
-            alert("Seu navegador não suporta a Web Serial API. Use o Google Chrome, Edge ou Opera.");
-            return;
-        }
-
-        try {
-            const port = await navigator.serial.requestPort();
-            await port.open({ baudRate: 9600 });
-
-            serialStatus.innerText = "🟢 Transmitindo...";
-            serialStatus.style.color = "#10b981";
-            btnConnectSerial.style.display = 'none';
-            
-            // Trava o select para o usuário não mudar de bomba no meio da transmissão
-            selectDispositivo.disabled = true; 
-
-            const textDecoder = new TextDecoderStream();
-            const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
-            const reader = textDecoder.readable.getReader();
-
-            const textEncoder = new TextEncoderStream();
-            const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-            const writer = textEncoder.writable.getWriter();
-
-            let buffer = "";
-            const dispositivoIdSelecionado = parseInt(selectDispositivo.value);
-
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    reader.releaseLock();
-                    break;
-                }
-                
-                buffer += value;
-                let lines = buffer.split('\n');
-                buffer = lines.pop(); 
-
-                for (let line of lines) {
-                    line = line.trim();
-                    
-                    if (line.startsWith('{') && line.endsWith('}')) {
-                        console.log("[USB Dados Brutos]:", line);
-                        
-                        try {
-                            const payload = JSON.parse(line);
-                            
-                            // 2. A MÁGICA ACONTECE AQUI: 
-                            // Injeta o ID da bomba selecionada na tela direto no JSON do Arduino
-                            payload.dispositivo_id = dispositivoIdSelecionado;
-                            
-                            const response = await fetch('/api/telemetria', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json'
-                                },
-                                body: JSON.stringify(payload)
-                            });
-
-                            if (response.ok) {
-                                const result = await response.json();
-                                
-                                if (result.critico_desligar === true) {
-                                    await writer.write('1'); // Ativa corte do Relé
-                                } else {
-                                    await writer.write('0'); // Mantém Relé ligado
-                                }
-                            }
-                        } catch (e) {
-                            console.error("Erro ao processar dados via USB:", e);
-                        }
-                    }
-                }
-            }
-        } catch (error) {
-            console.error("Erro na comunicação Serial:", error);
-            serialStatus.innerText = "🔴 Erro/Desconectado";
-            serialStatus.style.color = "#ef4444";
-            btnConnectSerial.style.display = 'block';
-            selectDispositivo.disabled = false; // Destrava o select em caso de erro
-        }
-    });
-} */

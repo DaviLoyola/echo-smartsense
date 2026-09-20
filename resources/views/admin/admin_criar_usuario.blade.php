@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Echo - Gerenciar Usuários</title>
-    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
 <body class="admin-page">
@@ -168,7 +168,7 @@
     </main>
 </div>
 
-<script defer src="/assets/javascript/script.min.js"></script>
+<script defer src="/assets/javascript/script.js"></script>
 
 </body>
 </html>

@@ -6,7 +6,7 @@
     <title>Echo - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="/assets/css/style.min.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body class="index-page">
 
@@ -39,8 +39,7 @@
                     <div class="alert-msg error" style="display: block;">{{ $message }}</div>
                 @enderror
 
-                <!-- CORRIGIDO: action com https -->
-                <form method="POST" action="{{ secure_url('/login') }}">
+                <form method="POST" action="{{ url('/login') }}">
                     @csrf
                     <div class="field-group">
                         <label>Email</label>
@@ -69,8 +68,7 @@
                     </div>
                 @endif
 
-                <!-- CORRIGIDO: action com https -->
-                <form method="POST" action="{{ secure_url('/register') }}">
+                <form method="POST" action="{{ url('/register') }}">
                     @csrf
                     <div class="field-group">
                         <label>Nome completo <span class="asterisk">*</span></label>
@@ -107,6 +105,6 @@
     </div>
 </div>
 
-<script defer src="/assets/javascript/script.min.js"></script>
+<script defer src="/assets/javascript/script.js"></script>
 </body>
 </html>

@@ -60,7 +60,7 @@
 
 <div id="toast" class="toast" style="display:none; position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 9999;"></div>
 
-<script src="/assets/javascript/script.min.js"></script>
+<script src="/assets/javascript/script.js"></script>
 
 @if(session('success'))
 <script>

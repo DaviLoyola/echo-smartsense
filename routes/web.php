@@ -8,7 +8,6 @@ use App\Http\Controllers\AdminDispositivoController;
 use App\Http\Controllers\TelemetryController;
 
 // Rotas Públicas (Visitantes)
-Route::get('/simular-leitura', [App\Http\Controllers\TelemetryController::class, 'simular']);
 Route::get('/', [WebsiteController::class, 'home'])->name('home');
 Route::get('/login', [WebsiteController::class, 'login'])->name('login');
 

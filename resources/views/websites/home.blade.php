@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
         body.landing-page,
         body.landing-page * {
@@ -106,33 +106,6 @@
         }
     </style>
 </head>
-
-<script>
-    // Verifica se a URL contém o parâmetro ?simular=1
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('simular') === '1') {
-        console.log('Modo simulação ativado – inserindo leituras a cada 1 segundo');
-
-        // Função que chama a rota de simulação
-        function enviarLeituraSimulada() {
-            fetch('/simular-leitura')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'ok') {
-                        // Apenas para debug (opcional)
-                        // console.log('Leitura inserida');
-                    }
-                })
-                .catch(err => console.error('Erro na simulação:', err));
-        }
-
-        // Dispara a primeira leitura imediatamente
-        enviarLeituraSimulada();
-
-        // E repete a cada 1 segundo
-        setInterval(enviarLeituraSimulada, 1000);
-    }
-</script>
 
 <body class="landing-page">
 
@@ -519,7 +492,7 @@
         </div>
     </div>
 
-    <script src="assets/javascript/script.min.js"></script>
+    <script src="/assets/javascript/script.js"></script>
     <script>
         window.openModal = function (modalId) {
             const modal = document.getElementById(modalId);

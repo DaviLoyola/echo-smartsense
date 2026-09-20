@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECHO – Painel Geral</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.min.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body class="user-page">
 

@@ -6,7 +6,7 @@
 
 <title>Echo - Dashboard</title>
 
-<link rel="stylesheet" href="/assets/css/style.min.css" >
+<link rel="stylesheet" href="/assets/css/style.css" >
 
 
 </head>

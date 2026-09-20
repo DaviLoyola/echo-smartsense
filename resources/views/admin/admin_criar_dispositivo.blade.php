@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Echo - Gerenciar Motobombas</title>
-    <link rel="stylesheet" href="/assets/css/style.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
         .section-title { grid-column: 1 / -1; margin-top: 15px;  solid #e1e5e9; color: var(--gray--900); font-size: 1.1rem; }
         .filter-form { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -197,6 +197,6 @@
     </main>
 </div>
 
-<script defer src="/assets/javascript/script.min.js"></script>
+<script defer src="/assets/javascript/script.js"></script>
 </body>
 </html>

@@ -1,15 +1,15 @@
 /* ============================================================
    AGROECHO - CSS UNIFICADO (VERSÃO PROFISSIONAL CLEAN)
-   ============================================================ /*
+   ============================================================ */
 
-/* --- RESET COMUM A TODAS AS PÁGINAS --- /*
+/* --- RESET COMUM A TODAS AS PÁGINAS --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* --- VARIÁVEIS GLOBAIS --- /*
+/* --- VARIÁVEIS GLOBAIS --- */
 :root {
     --green-50: #f0fdf4;
     --green-100: #dcfce7;
@@ -100,7 +100,7 @@
 
 /* ============================================================
    LANDING PAGE (index.html) - PROFISSIONAL CLEAN
-   ============================================================ /*
+   ============================================================ */
 html {
     scroll-behavior: smooth;
 }
@@ -114,7 +114,7 @@ body.landing-page {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- ANIMAÇÕES --- /*
+/* --- ANIMAÇÕES --- */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -182,7 +182,7 @@ body.landing-page .scroll-animate {
     animation-range: entry 10% cover 40%;
 }
 
-/* --- HEADER --- /*
+/* --- HEADER --- */
 body.landing-page .header {
     position: fixed;
     top: 0;
@@ -242,7 +242,7 @@ body.landing-page .logo-text span {
     color: #00a896;
 }
 
-/* --- NAVEGAÇÃO --- /*
+/* --- NAVEGAÇÃO --- */
 body.landing-page .nav-menu {
     display: flex;
     list-style: none;
@@ -284,7 +284,7 @@ body.landing-page .header.scrolled .nav-menu a:hover {
     color: #00a896;
 }
 
-/* --- BOTÕES --- /*
+/* --- BOTÕES --- */
 body.landing-page .btn-dashboard {
     background-color: #00a896;
     color: #ffffff;
@@ -352,7 +352,7 @@ body.landing-page .btn-secondary:hover {
     transform: translateY(-2px);
 }
 
-/* --- HERO --- /*
+/* --- HERO --- */
 body.landing-page .hero {
     position: relative;
     min-height: 100vh;
@@ -456,7 +456,7 @@ body.landing-page .hero-actions {
     margin-bottom: 60px;
 }
 
-/* --- MINI CARDS HERO --- /*
+/* --- MINI CARDS HERO --- */
 body.landing-page .hero-mini-cards {
     display: flex;
     justify-content: center;
@@ -539,7 +539,7 @@ body.landing-page .mini-card-info h4 {
     line-height: 1.2;
 }
 
-/* --- BOTÃO PULSE --- /*
+/* --- BOTÃO PULSE --- */
 body.landing-page .btn-pulse {
     background-color: rgba(0, 168, 150, 0.08);
     color: #008f80;
@@ -565,7 +565,7 @@ body.landing-page .btn-pulse:hover {
     box-shadow: 0 6px 18px rgba(0, 168, 150, 0.35);
 }
 
-/* --- SEÇÕES --- /*
+/* --- SEÇÕES --- */
 body.landing-page .section {
     padding: 80px 24px;
     max-width: 1200px;
@@ -612,14 +612,14 @@ body.landing-page .section-subtitle {
     line-height: 1.6;
 }
 
-/* --- GRIDS --- /*
+/* --- GRIDS --- */
 body.landing-page .tech-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
 
-/* --- CARDS GRANDES --- /*
+/* --- CARDS GRANDES --- */
 body.landing-page .tech-card-large {
     background-color: #ffffff;
     border-radius: 20px;
@@ -652,7 +652,7 @@ body.landing-page .tech-card-large p {
     flex-grow: 1;
 }
 
-/* --- CARDS PEQUENOS --- /*
+/* --- CARDS PEQUENOS --- */
 body.landing-page .tech-card-small {
     background-color: #ffffff;
     border-radius: 16px;
@@ -710,7 +710,7 @@ body.landing-page .tech-info-small p {
     line-height: 1.5;
 }
 
-/* --- SMART COST BANNER --- /*
+/* --- SMART COST BANNER --- */
 body.landing-page .smart-cost-banner {
     display: flex;
     align-items: center;
@@ -735,7 +735,7 @@ body.landing-page .smart-cost-banner::before {
     background: linear-gradient(90deg, #00a896 0%, #2ecc71 50%, #00a896 100%);
 }
 
-/* --- PERÍODO CRÍTICO --- /*
+/* --- PERÍODO CRÍTICO --- */
 body.landing-page .periodo-critico {
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease;
 }
@@ -745,7 +745,7 @@ body.landing-page .periodo-critico:hover {
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
 }
 
-/* --- MODAL --- /*
+/* --- MODAL --- */
 body.landing-page .modal-overlay {
     position: fixed;
     top: 0;
@@ -833,7 +833,7 @@ body.landing-page .modal-content strong {
     font-weight: 700;
 }
 
-/* --- FOOTER --- /*
+/* --- FOOTER --- */
 body.landing-page .footer-main {
     background: linear-gradient(180deg, #0a1320 0%, #060d16 100%);
     color: #ffffff;
@@ -946,7 +946,7 @@ body.landing-page .footer-socials a.icon-whatsapp:hover {
     background-color: #25d366;
 }
 
-/* --- RESPONSIVIDADE --- /*
+/* --- RESPONSIVIDADE --- */
 @media (max-width: 1024px) {
     body.landing-page .tech-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1025,9 +1025,9 @@ body.landing-page .footer-socials a.icon-whatsapp:hover {
 
 /* ============================================================
    DEMAIS PÁGINAS (index.html/login, dashboard, user, admin)
-   ============================================================ /*
+   ============================================================ */
 
-/* --- INDEX.HTML (LOGIN) --- /*
+/* --- INDEX.HTML (LOGIN) --- */
 body.index-page {
     min-height: 100vh;
     display: flex;
@@ -1485,7 +1485,7 @@ body.index-page .alert-msg.error {
 
 /* ============================================================
    DASHBOARD.HTML
-   ============================================================ /*
+   ============================================================ */
 body.dashboard-page {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg);
@@ -1731,7 +1731,7 @@ body.dashboard-page .status {
 
 /* ============================================================
    MODAL DE GRÁFICO (POPUP EM TEMPO REAL) - USER DISPOSITIVOS
-   ============================================================ /*
+   ============================================================ */
 body.user-page .chart-modal-overlay {
     position: fixed;
     top: 0;
@@ -1930,7 +1930,7 @@ body.dashboard-page .sidebar-overlay.active {
 
 /* ============================================================
    USER_DISPOSITIVOS.HTML
-   ============================================================ /*
+   ============================================================ */
 body.user-page {
     background: var(--bg);
     color: var(--text-main);
@@ -2329,7 +2329,7 @@ body.user-page .color-card {
 
 /* ============================================================
    ADMIN_CRIAR_USUARIO.HTML
-   ============================================================ /*
+   ============================================================ */
 body.admin-page {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg);
@@ -2738,13 +2738,13 @@ body.admin-page .sidebar-overlay.active {
     }
     /* ============================================================
    MODAL DE GRÁFICO (POPUP EM TEMPO REAL)
-   ============================================================ /*
+   ============================================================ */
 .chart-modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
     z-index: 3000;
-    display: flex; /* Mantido como flex pelo script para abrir centralizado /*
+    display: flex; /* Mantido como flex pelo script para abrir centralizado */
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(4px);
@@ -2752,8 +2752,8 @@ body.admin-page .sidebar-overlay.active {
 
 .chart-modal-content {
     background: var(--card, #ffffff);
-    width: 70%;       /* Ocupa 70% da tela /*
-    height: 70vh;     /* Proporção amigável de altura /*
+    width: 70%;       /* Ocupa 70% da tela */
+    height: 70vh;     /* Proporção amigável de altura */
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -2813,4 +2813,4 @@ body.admin-page .sidebar-overlay.active {
 
 
 
-}   /*
+}   */

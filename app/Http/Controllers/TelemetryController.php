@@ -4,18 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Services\MonitoramentoService;
-
 class TelemetryController extends Controller
 {
-    protected $monitoramentoService;
-
-    // Injeta o nosso Service de Cálculos automaticamente
-    public function __construct(MonitoramentoService $monitoramentoService)
-    {
-        $this->monitoramentoService = $monitoramentoService;
-    }
-
     public function receberLeitura(Request $request)
     {
         // 1. Validação rápida dos dados recebidos do Hardware
@@ -49,17 +39,10 @@ class TelemetryController extends Controller
             'ultima_comunicacao' => now()
         ]);
 
-        // 4. Executa a inteligência de processamento de limites e envio de e-mails
-        $this->monitoramentoService->analisar($dadosValidados['dispositivo_id'], $dadosValidados);
-
-        // 5. Consulta o estado atualizado após a análise para mandar a instrução do relé
-        $dispositivo = DB::table('dispositivos')->where('id', $dadosValidados['dispositivo_id'])->first();
-
-        // Retorna o JSON direto para o Arduino ler e tomar a ação física na bomba
+        // 4. Retorna confirmação de recebimento para o Gateway ESP32
         return response()->json([
-            'status'           => 'success',
-            'critico_desligar' => (bool) $dispositivo->critico_desligar,
-            'bomba_status'     => $dispositivo->status
+            'status'  => 'success',
+            'message' => 'Telemetria registrada com sucesso'
         ], 200);
     }
 

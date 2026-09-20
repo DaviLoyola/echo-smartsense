@@ -123,6 +123,6 @@
 </main>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-<script src="/assets/javascript/script.min.js"></script>
+<script src="/assets/javascript/script.js"></script>
 
 @endsection
