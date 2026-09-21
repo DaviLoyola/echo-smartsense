@@ -1,5 +1,11 @@
 # Documentos locais / rascunhos
 PROJETO.md
+/docs
+docs/
+*md
+.agents/
+.agents/rules/regras.md
+
 
 # Laravel / PHP / Composer
 /vendor
