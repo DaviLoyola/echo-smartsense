@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Echo - Gerenciar Usuários</title>
     <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .role-badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .role-admin { background: #ffe2e2; color: #b42323; }
+        .role-user { background: #dcebff; color: #2257a7; }
+    </style>
 </head>
 
 <body class="admin-page">
@@ -140,7 +145,7 @@
                             <td>{{ $u->nome }}</td>
                             <td>{{ $u->email }}</td>
                             <td>
-                                <span class="role-badge" style="background: {{ $u->role === 'admin' ? '#ffe2e2' : '#dcebff' }}; color: {{ $u->role === 'admin' ? '#b42323' : '#2257a7' }}; padding:4px 8px; border-radius:4px; font-weight:bold;">
+                                <span class="role-badge {{ $u->role === 'admin' ? 'role-admin' : 'role-user' }}">
                                     {{ $u->role === 'admin' ? 'Administrador' : 'Usuário' }}
                                 </span>
                             </td>

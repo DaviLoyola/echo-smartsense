@@ -6,9 +6,12 @@
     <title>Echo - Gerenciar Motobombas</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <style>
-        .section-title { grid-column: 1 / -1; margin-top: 15px;  solid #e1e5e9; color: var(--gray--900); font-size: 1.1rem; }
+        .section-title { grid-column: 1 / -1; margin-top: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; color: #1e293b; font-size: 1.2rem; font-weight: bold; }
         .filter-form { display: flex; gap: 10px; margin-bottom: 15px; }
         .filter-form select { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; width: 300px; background-color: white; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .status-active { background: #e2f7ed; color: #1b8f5a; }
+        .status-inactive { background: #ffe2e2; color: #b42323; }
     </style>
 </head>
 <body class="admin-page">
@@ -77,7 +80,7 @@
                 <input type="hidden" name="id" value="{{ $editDevice->id ?? '' }}">
 
                 <div class="form-grid">
-                    <h3 class="section-title">Dados Gerais</h3>
+                    <h3 class="section-title" style="margin-top: 0;">Dados Gerais</h3>
                     <div class="form-group">
                         <label>Nome da Bomba</label>
                         <input type="text" name="nome" value="{{ $editDevice->nome ?? '' }}" required placeholder="Ex: Bomba do Poço 02">
@@ -113,24 +116,50 @@
                         </select>
                     </div>
 
-                    <h3 class="section-title">Parâmetros de Proteção (Padrão Schneider 2.0 CV)</h3>
+                    <h3 class="section-title">Credenciais do Dispositivo</h3>
+                    @if($editDevice && isset($editDevice->api_key))
+                        <div class="form-group" style="grid-column: 1 / -1; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px dashed #cbd5e1;">
+                            <label style="color: #0f172a; font-weight: bold;">API Key (Copie para o ESP32):</label>
+                            <div style="display: flex; gap: 10px; margin-top: 5px;">
+                                <input type="text" value="{{ $editDevice->api_key }}" readonly style="flex: 1; background: #e2e8f0; font-family: monospace;">
+                                <button type="button" onclick="navigator.clipboard.writeText('{{ $editDevice->api_key }}'); alert('API Key copiada!');" style="padding: 8px 15px; background: #2257a7; color: white; border: none; border-radius: 6px; cursor: pointer;">Copiar</button>
+                            </div>
+                        </div>
+                    @else
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <p style="font-size: 0.9rem; color: #64748b;">A API Key será gerada automaticamente após salvar a motobomba.</p>
+                        </div>
+                    @endif
+
+                    <h3 class="section-title">Parâmetros Elétricos</h3>
                     
                     <div class="form-group"><label>Corrente Alerta (A)</label><input type="number" step="0.001" name="corrente_alerta" value="{{ $editLimits->corrente_alerta ?? '7.150' }}"></div>
-                    <div class="form-group"><label>Corrente Corte Alta (A)</label><input type="number" step="0.001" name="corrente_desligar_alta" value="{{ $editLimits->corrente_desligar_alta ?? '8.000' }}"></div>
-                    <div class="form-group"><label>Corrente Trabalho a Seco (A)</label><input type="number" step="0.001" name="corrente_desligar_baixa" value="{{ $editLimits->corrente_desligar_baixa ?? '3.250' }}"></div>
+                    <div class="form-group"><label>Corrente Corte Alta (A)</label><input type="number" step="0.001" name="corrente_corte_alta" value="{{ $editLimits->corrente_corte_alta ?? '8.000' }}"></div>
+                    <div class="form-group"><label>Corrente Trabalho a Seco (A)</label><input type="number" step="0.001" name="corrente_corte_seco" value="{{ $editLimits->corrente_corte_seco ?? '3.250' }}"></div>
                     
                     <div class="form-group"><label>Tensão Alerta Baixa (V)</label><input type="number" step="0.001" name="tensao_alerta_baixa" value="{{ $editLimits->tensao_alerta_baixa ?? '204.600' }}"></div>
                     <div class="form-group"><label>Tensão Alerta Alta (V)</label><input type="number" step="0.001" name="tensao_alerta_alta" value="{{ $editLimits->tensao_alerta_alta ?? '235.400' }}"></div>
-                    <div class="form-group"><label>Tensão Corte Baixa (V)</label><input type="number" step="0.001" name="tensao_desligar_baixa" value="{{ $editLimits->tensao_desligar_baixa ?? '198.000' }}"></div>
-                    <div class="form-group"><label>Tensão Corte Alta (V)</label><input type="number" step="0.001" name="tensao_desligar_alta" value="{{ $editLimits->tensao_desligar_alta ?? '242.000' }}"></div>
+                    <div class="form-group"><label>Tensão Corte Baixa (V)</label><input type="number" step="0.001" name="tensao_corte_baixa" value="{{ $editLimits->tensao_corte_baixa ?? '198.000' }}"></div>
+                    <div class="form-group"><label>Tensão Corte Alta (V)</label><input type="number" step="0.001" name="tensao_corte_alta" value="{{ $editLimits->tensao_corte_alta ?? '242.000' }}"></div>
+                    
+                    <h3 class="section-title">Parâmetros Mecânicos</h3>
                     
                     <div class="form-group"><label>Vibração Alerta (mm/s)</label><input type="number" step="0.001" name="vibracao_alerta" value="{{ $editLimits->vibracao_alerta ?? '6.600' }}"></div>
-                    <div class="form-group"><label>Vibração Corte (mm/s)</label><input type="number" step="0.001" name="vibracao_desligar" value="{{ $editLimits->vibracao_desligar ?? '8.300' }}"></div>
+                    <div class="form-group"><label>Vibração Corte (mm/s)</label><input type="number" step="0.001" name="vibracao_corte" value="{{ $editLimits->vibracao_corte ?? '8.300' }}"></div>
                     
                     <div class="form-group"><label>Temperatura Alerta (°C)</label><input type="number" step="0.001" name="temperatura_alerta" value="{{ $editLimits->temperatura_alerta ?? '124.000' }}"></div>
-                    <div class="form-group"><label>Temperatura Corte (°C)</label><input type="number" step="0.001" name="temperatura_desligar" value="{{ $editLimits->temperatura_desligar ?? '155.000' }}"></div>
+                    <div class="form-group"><label>Temperatura Corte (°C)</label><input type="number" step="0.001" name="temperatura_corte" value="{{ $editLimits->temperatura_corte ?? '155.000' }}"></div>
+                    
+                    <h3 class="section-title">Parâmetros Hidráulicos e Pressão</h3>
                     
                     <div class="form-group"><label>Fluxo Alerta Baixo (%)</label><input type="number" step="0.001" name="fluxo_alerta_baixo" value="{{ $editLimits->fluxo_alerta_baixo ?? '30.000' }}"></div>
+                    <div class="form-group"><label>Fluxo Corte (Fixo)</label><input type="number" step="0.001" value="0.000" readonly style="background:#e2e8f0; cursor:not-allowed;"></div>
+                    
+                    <div class="form-group"><label>Pressão Linear Alerta (bar)</label><input type="number" step="0.001" name="pressao_linear_alerta" value="{{ $editLimits->pressao_linear_alerta ?? '6.000' }}"></div>
+                    <div class="form-group"><label>Pressão Linear Corte (bar)</label><input type="number" step="0.001" name="pressao_linear_corte" value="{{ $editLimits->pressao_linear_corte ?? '8.000' }}"></div>
+                    
+                    <div class="form-group"><label>Pressão Diferencial Alerta (bar)</label><input type="number" step="0.001" name="pressao_diferencial_alerta" value="{{ $editLimits->pressao_diferencial_alerta ?? '2.000' }}"></div>
+                    <div class="form-group"><label>Pressão Diferencial Corte (bar)</label><input type="number" step="0.001" name="pressao_diferencial_corte" value="{{ $editLimits->pressao_diferencial_corte ?? '3.500' }}"></div>
 
                     <div class="form-group" style="display:flex; align-items:end; gap:10px; margin-top: 15px; grid-column: 1 / -1;">
                         <button type="submit" class="btn-create" style="padding:12px 20px;">Salvar</button>
@@ -176,7 +205,7 @@
                             <td>{{ $d->modelo ?? '-' }}</td>
                             <td>{{ $d->dono_nome ?? 'Sem vínculo' }}</td>
                             <td>
-                                <span style="background: {{ $d->status === 'active' ? '#e2f7ed' : '#ffe2e2' }}; color: {{ $d->status === 'active' ? '#1b8f5a' : '#b42323' }}; padding:4px 8px; border-radius:4px; font-weight:bold;">
+                                <span class="status-badge {{ $d->status === 'active' ? 'status-active' : 'status-inactive' }}">
                                     {{ $d->status === 'active' ? 'Ativo' : 'Inativo' }}
                                 </span>
                             </td>
