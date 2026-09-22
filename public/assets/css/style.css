@@ -429,6 +429,7 @@ body.landing-page .hero h1 {
 body.landing-page .gradient-text-hero {
     background: linear-gradient(100deg, #4f9dfb 0%, #31c4b5 45%, #2ecc71 100%);
     background-size: 200% auto;
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
@@ -593,12 +594,14 @@ body.landing-page .section-title-gradient {
 
 body.landing-page .section-title-gradient .text-tech {
     background: linear-gradient(135deg, #0f4c81 0%, #1e3a8a 100%);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 body.landing-page .section-title-gradient .text-precision {
     background: linear-gradient(135deg, #00a896 0%, #2ecc71 100%);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -2088,6 +2091,115 @@ body.user-page .sensor-card:hover {
     box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04), 0 16px 36px rgba(27, 143, 90, 0.14);
 }
 
+/* card offline: opacidade reduzida e borda cinza */
+body.user-page .sensor-card.sensor-offline {
+    opacity: 0.65;
+    border-top-color: #94a3b8 !important;
+}
+body.user-page .sensor-card.sensor-offline:hover {
+    transform: none;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+}
+
+/* banner de alerta offline */
+body.user-page .offline-banner {
+    background: #fef2f2;
+    color: #991b1b;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    letter-spacing: 0.03em;
+    border: 1px solid #fecaca;
+}
+[data-theme="dark"] body.user-page .offline-banner {
+    background: #450a0a;
+    color: #fca5a5;
+    border-color: #7f1d1d;
+}
+
+/* badge de conexao */
+body.user-page .conn-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+}
+body.user-page .conn-online {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+body.user-page .conn-offline {
+    background: rgba(148, 163, 184, 0.15);
+    color: #64748b;
+}
+
+/* secao de leituras agrupadas */
+body.user-page .reading-section {
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border);
+}
+[data-theme="dark"] body.user-page .reading-section {
+    background: rgba(255, 255, 255, 0.03);
+}
+body.user-page .reading-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+}
+body.user-page .reading-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+body.user-page .reading-item {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: var(--card);
+}
+body.user-page .reading-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+body.user-page .reading-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-top: 2px;
+}
+
+/* modulo ou leitura nao instalada (null) */
+body.user-page .reading-disabled {
+    opacity: 0.4;
+}
+body.user-page .reading-disabled .reading-value {
+    color: var(--gray-400);
+}
+body.user-page .section-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+@media (max-width: 640px) {
+    body.user-page .reading-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 body.user-page .sensor-value {
     font-size: 28px;
     font-weight: 700;
@@ -2736,7 +2848,44 @@ body.admin-page .sidebar-overlay.active {
         flex-direction: column;
         align-items: flex-start;
     }
-    /* ============================================================
+}
+
+/* ============================================================
+   STATUS BADGES & BORDERS (ECO-SMARTSENSE)
+   ============================================================ */
+.badge-status {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}
+.badge-status-active, .badge-status-normal {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+.badge-status-maintenance {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+.badge-status-error {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.sensor-card-online-active, .sensor-card-online-normal {
+    border-top: 4px solid #10b981;
+}
+.sensor-card-online-maintenance {
+    border-top: 4px solid #f59e0b;
+}
+.sensor-card-online-error {
+    border-top: 4px solid #ef4444;
+}
+.sensor-card-offline-border {
+    border-top: 4px solid #94a3b8;
+}
+
+/* ============================================================
    MODAL DE GRÁFICO (POPUP EM TEMPO REAL)
    ============================================================ */
 .chart-modal-overlay {
@@ -2810,7 +2959,3 @@ body.admin-page .sidebar-overlay.active {
         height: 60vh;
     }
 }
-
-
-
-}   */

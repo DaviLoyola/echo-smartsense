@@ -245,13 +245,14 @@ function showToast(m) {
 }
 
 // ============================================================
-// MODAL DE GRÁFICOS EM TEMPO REAL (INTEGRAÇÃO LARAVEL VIA AJAX)
+// MODAL DE GRAFICOS EM TEMPO REAL (INTEGRACAO LARAVEL VIA AJAX)
 // ============================================================
 let realTimeChartInstance = null;
 let realTimeInterval = null;
 let currentBombaId = null;
 let currentChartData = [];
 let currentLimits = {};
+let currentOnline = false;
 
 window.openChartModal = function(bombaId, bombaNome) {
     const modal = document.getElementById('chartModal');
@@ -259,9 +260,9 @@ window.openChartModal = function(bombaId, bombaNome) {
         currentBombaId = bombaId;
         document.getElementById('chartModalTitle').innerText = 'Monitoramento - ' + bombaNome;
         modal.style.display = 'flex';
-        
+
         fetchChartData();
-        // Polling a cada 3 segundos conforme ADR #6
+        // polling a cada 3 segundos conforme adr #6
         realTimeInterval = setInterval(fetchChartData, 3000);
     }
 }
@@ -272,6 +273,11 @@ window.closeChartModal = function() {
         modal.style.display = 'none';
         if(realTimeInterval) clearInterval(realTimeInterval);
         currentBombaId = null;
+        // destroi o grafico para recriar limpo na proxima abertura
+        if(realTimeChartInstance) {
+            realTimeChartInstance.destroy();
+            realTimeChartInstance = null;
+        }
     }
 }
 
@@ -281,49 +287,75 @@ async function fetchChartData() {
     try {
         const response = await fetch(`/dispositivos/${currentBombaId}/realtime`);
         const result = await response.json();
-        
+
         if (result.status === 'success') {
-            currentChartData = result.leituras;
+            currentChartData = result.leituras || [];
             currentLimits = result.limites || {};
+            currentOnline = result.online;
+
+            // atualiza badge de conexao no modal
+            const badge = document.getElementById('chartOnlineStatus');
+            if (badge) {
+                badge.textContent = currentOnline ? 'Online' : 'Offline';
+                badge.className = 'conn-badge ' + (currentOnline ? 'conn-online' : 'conn-offline');
+            }
+
             renderChart();
         }
     } catch (error) {
-        console.error("Erro ao buscar dados de telemetria:", error);
+        console.error("erro ao buscar dados de telemetria:", error);
     }
 }
 
+// mapeia a metrica selecionada para os limites corretos da tabela limites_operacionais
 function getActiveLimits(metric) {
     if (!currentLimits) return { alert: null, crit: null };
-    
+
     switch (metric) {
-        case 'temperatura_motor': return { alert: currentLimits.temperatura_alerta, crit: currentLimits.temperatura_desligar };
-        case 'corrente_a': return { alert: currentLimits.corrente_alerta, crit: currentLimits.corrente_desligar_alta };
-        case 'tensao_v': return { alert: currentLimits.tensao_alerta_alta, crit: currentLimits.tensao_desligar_alta };
-        case 'vibracao': return { alert: currentLimits.vibracao_alerta, crit: currentLimits.vibracao_desligar };
-        case 'fluxo_agua': return { alert: currentLimits.fluxo_alerta_baixo, crit: currentLimits.fluxo_desligar_zero };
-        default: return { alert: null, crit: null };
+        case 'corrente_fase_a':
+        case 'corrente_fase_b':
+        case 'corrente_fase_c':
+            return { alert: currentLimits.corrente_alerta, crit: currentLimits.corrente_corte_alta };
+        case 'tensao_fase_a':
+        case 'tensao_fase_b':
+        case 'tensao_fase_c':
+            return { alert: currentLimits.tensao_alerta_alta, crit: currentLimits.tensao_corte_alta };
+        case 'temperatura_motor':
+            return { alert: currentLimits.temperatura_alerta, crit: currentLimits.temperatura_corte };
+        case 'vibracao':
+            return { alert: currentLimits.vibracao_alerta, crit: currentLimits.vibracao_corte };
+        case 'fluxo_agua':
+            return { alert: currentLimits.fluxo_alerta_baixo, crit: currentLimits.fluxo_corte_zero };
+        case 'pressao_linear':
+            return { alert: currentLimits.pressao_linear_alerta, crit: currentLimits.pressao_linear_corte };
+        case 'pressao_diferencial':
+            return { alert: currentLimits.pressao_diferencial_alerta, crit: currentLimits.pressao_diferencial_corte };
+        default:
+            return { alert: null, crit: null };
     }
 }
 
 window.renderChart = function() {
     const canvas = document.getElementById('realTimeChart');
     if(!canvas || currentChartData.length === 0) return;
-    
+
     const ctx = canvas.getContext('2d');
     const metric = document.getElementById('metricSelect').value;
     const limits = getActiveLimits(metric);
 
+    // monta os labels de horario (hh:mm:ss)
     const labels = currentChartData.map(d => {
         const date = new Date(d.momento_leitura);
-        return date.getHours().toString().padStart(2, '0') + ':' + 
-               date.getMinutes().toString().padStart(2, '0') + ':' + 
+        return date.getHours().toString().padStart(2, '0') + ':' +
+               date.getMinutes().toString().padStart(2, '0') + ':' +
                date.getSeconds().toString().padStart(2, '0');
     });
 
-    const dataPoints = currentChartData.map(d => parseFloat(d[metric]));
-
-    const alertData = limits.alert ? Array(labels.length).fill(limits.alert) : [];
-    const critData = limits.crit ? Array(labels.length).fill(limits.crit) : [];
+    // trata null para nao quebrar o grafico (modulo nao instalado)
+    const dataPoints = currentChartData.map(d => {
+        const val = d[metric];
+        return val !== null && val !== undefined ? parseFloat(val) : null;
+    });
 
     const datasets = [{
         label: 'Leitura em Tempo Real',
@@ -333,13 +365,15 @@ window.renderChart = function() {
         borderWidth: 2,
         fill: true,
         tension: 0.4,
-        pointRadius: 3
+        pointRadius: 3,
+        spanGaps: true
     }];
 
-    if (limits.alert) {
+    // linha tracejada de alerta (amarela)
+    if (limits.alert !== null && limits.alert !== undefined) {
         datasets.push({
             label: 'Limite de Alerta',
-            data: alertData,
+            data: Array(labels.length).fill(parseFloat(limits.alert)),
             borderColor: '#f59e0b',
             borderWidth: 2,
             borderDash: [5, 5],
@@ -348,10 +382,11 @@ window.renderChart = function() {
         });
     }
 
-    if (limits.crit) {
+    // linha tracejada de corte critico (vermelha)
+    if (limits.crit !== null && limits.crit !== undefined) {
         datasets.push({
-            label: 'Limite Crítico (Corte)',
-            data: critData,
+            label: 'Limite Critico (Corte)',
+            data: Array(labels.length).fill(parseFloat(limits.crit)),
             borderColor: '#ef4444',
             borderWidth: 2,
             borderDash: [5, 5],

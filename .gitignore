@@ -2,6 +2,11 @@
 PROJETO.md
 /docs
 docs/
+/firmware
+firmware/
+/esp32_codes
+esp32_codes/
+
 *md
 .agents/
 .agents/rules/regras.md
