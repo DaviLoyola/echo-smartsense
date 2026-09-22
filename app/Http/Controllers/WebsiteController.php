@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers; 
 
-use App\Http\Controllers; 
 use App\Models\Dispositivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WebsiteController extends Controller{
     public function home(){
@@ -16,8 +16,9 @@ class WebsiteController extends Controller{
     }
 
     public function dispositivos(){
-        // 1. Pega o usuário logado
-        $usuario = auth()->user();
+        // 1. pega o usuario logado
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
 
         // 2. Busca APENAS os dispositivos vinculados a este usuário com a última leitura
         $dispositivos = $usuario->dispositivos()->with('ultimaLeitura')->get();
@@ -38,43 +39,53 @@ class WebsiteController extends Controller{
 
     public function relatorios(Request $request) 
     {
-        $usuario = auth()->user();
+        /** @var \App\Models\Usuario $usuario */
+        $usuario = Auth::user();
 
-        // 1. Guarda em um array todos os IDs de dispositivos que pertencem a esse usuário
+        // 1. ids de dispositivos permitidos
         $meusIdsDispositivos = $usuario->dispositivos()->pluck('id')->toArray();
 
-        // 2. Alimenta os checkboxes da tela APENAS com as motobombas dele
+        // 2. alimenta os checkboxes
         $todosDispositivos = $usuario->dispositivos;
 
-        // 3. Inicia a busca das leituras amarrada apenas aos IDs permitidos do usuário
-        $query = \App\Models\LeituraSensor::whereIn('dispositivo_id', $meusIdsDispositivos)
+        // 3. inicia as queries amarradas aos ids do usuario
+        $queryLeituras = \App\Models\LeituraSensor::whereIn('dispositivo_id', $meusIdsDispositivos)
             ->with('dispositivo')
             ->orderBy('momento_leitura', 'desc');
 
-        // 4. Aplica o filtro de Data Inicial e Final
+        $queryEventos = \App\Models\EventoDecisao::whereIn('dispositivo_id', $meusIdsDispositivos)
+            ->with('dispositivo')
+            ->orderBy('momento_evento', 'desc');
+
+        // 4. aplica o filtro de data
         if ($request->filled('data_inicio')) {
-            $query->whereDate('momento_leitura', '>=', $request->data_inicio);
+            $queryLeituras->whereDate('momento_leitura', '>=', $request->data_inicio);
+            $queryEventos->whereDate('momento_evento', '>=', $request->data_inicio);
         }
         if ($request->filled('data_fim')) {
-            $query->whereDate('momento_leitura', '<=', $request->data_fim);
+            $queryLeituras->whereDate('momento_leitura', '<=', $request->data_fim);
+            $queryEventos->whereDate('momento_evento', '<=', $request->data_fim);
         }
 
-        // 5. Aplica o filtro de Dispositivos Selecionados (Checkbox)
+        // 5. aplica filtro de dispositivos
         if ($request->filled('dispositivos_selecionados')) {
-            // SEGURANÇA: array_intersect garante que, mesmo se injetarem um ID de fora no HTML, o sistema remove antes de ir pro banco
             $filtradosSeguros = array_intersect($request->dispositivos_selecionados, $meusIdsDispositivos);
-            $query->whereIn('dispositivo_id', $filtradosSeguros);
+            $queryLeituras->whereIn('dispositivo_id', $filtradosSeguros);
+            $queryEventos->whereIn('dispositivo_id', $filtradosSeguros);
         }
 
-        // 6. Executa a busca limitada
-        $leituras = $query->limit(1000)->get();
+        // 6. executa as buscas limitadas
+        $leituras = $queryLeituras->limit(1000)->get();
+        $eventos = $queryEventos->limit(1000)->get();
 
-        // 7. Define as colunas (mantendo seu padrão)
+        // 7. colunas selecionadas para aba 1
         $colunas = $request->input('colunas', [
-            'tensao_v', 'corrente_a', 'potencia_kw', 'vibracao', 
-            'fluxo_agua', 'volume_total', 'temperatura_motor'
+            'corrente_fase_a', 'corrente_fase_b', 'corrente_fase_c',
+            'tensao_fase_a', 'tensao_fase_b', 'tensao_fase_c',
+            'fluxo_agua', 'vibracao', 'temperatura_motor',
+            'pressao_linear', 'pressao_diferencial'
         ]);
 
-        return view('websites.relatorios', compact('leituras', 'todosDispositivos', 'colunas'));
+        return view('websites.relatorios', compact('leituras', 'eventos', 'todosDispositivos', 'colunas'));
     }
 }

@@ -215,19 +215,19 @@ if (confirmModal) {
 // ============================================================
 // RELATÓRIOS (EXPORTAÇÃO EXCEL)
 // ============================================================
-window.exportarParaExcel = function() {
+window.exportarParaExcel = function(tableId = 'tabela-bruta', sheetName = 'Dados') {
     try {
-        var tabela = document.getElementById("tabela-bruta");
+        var tabela = document.getElementById(tableId);
         if (!tabela) {
             alert("Nenhuma tabela encontrada para exportar.");
             return;
         }
-        var workbook = XLSX.utils.table_to_book(tabela, {sheet: "Dados Brutos"});
+        var workbook = XLSX.utils.table_to_book(tabela, {sheet: sheetName});
         var dataHoje = new Date().toISOString().split('T')[0];
-        var nomeArquivo = 'Relatorio_AgroEcho_' + dataHoje + '.xlsx';
+        var nomeArquivo = 'Relatorio_Echo_' + sheetName.replace(/\s+/g, '_') + '_' + dataHoje + '.xlsx';
         XLSX.writeFile(workbook, nomeArquivo);
     } catch (error) {
-        console.error('Erro na exportação:', error);
+        console.error('Erro na exportacao:', error);
         alert("Ocorreu um erro ao gerar o Excel. Tente novamente.");
     }
 };
