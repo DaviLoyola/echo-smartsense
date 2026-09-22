@@ -75,16 +75,35 @@ class TelemetryController extends Controller
 
         // se o esp32 reportou alerta ou corte, registra na tabela de auditoria (adr #2)
         if (in_array($dadosValidados['status'], ['alerta', 'corte_emergencial', 'reconexao'])) {
-            EventoDecisao::create([
-                'dispositivo_id'    => $dispositivo->id,
-                'tipo_evento'       => $dadosValidados['status'],
-                'grandeza_acionada' => $dadosValidados['tipo_alerta'] ?? 'nao_informado',
-                'valor_medido'      => $leituras[$dadosValidados['tipo_alerta']] ?? 0,
-                'valor_limite'      => $dadosValidados['valor_limite'] ?? 0,
-                'acao_tomada'       => $dadosValidados['acao_tomada'] ?? 'nenhuma',
-                'motivo'            => $dadosValidados['motivo'] ?? null,
-                'momento_evento'    => now(),
-            ]);
+            
+            // previne flood no banco: verifica se ja existe um evento identico recente (ultimos 60 min)
+            $ultimoEvento = EventoDecisao::where('dispositivo_id', $dispositivo->id)
+                ->orderBy('momento_evento', 'desc')
+                ->first();
+
+            $grandezaAtual = $dadosValidados['tipo_alerta'] ?? 'nao_informado';
+            $bloquearFlood = false;
+
+            if ($ultimoEvento) {
+                if ($ultimoEvento->tipo_evento === $dadosValidados['status'] && 
+                    $ultimoEvento->grandeza_acionada === $grandezaAtual &&
+                    $ultimoEvento->momento_evento->diffInMinutes(now()) < 60) {
+                    $bloquearFlood = true;
+                }
+            }
+
+            if (!$bloquearFlood) {
+                EventoDecisao::create([
+                    'dispositivo_id'    => $dispositivo->id,
+                    'tipo_evento'       => $dadosValidados['status'],
+                    'grandeza_acionada' => $grandezaAtual,
+                    'valor_medido'      => $leituras[$grandezaAtual] ?? 0,
+                    'valor_limite'      => $dadosValidados['valor_limite'] ?? 0,
+                    'acao_tomada'       => $dadosValidados['acao_tomada'] ?? 'nenhuma',
+                    'motivo'            => $dadosValidados['motivo'] ?? null,
+                    'momento_evento'    => now(),
+                ]);
+            }
         }
 
         // atualiza o timestamp de ultima comunicacao do dispositivo (adr #8)
@@ -119,6 +138,7 @@ class TelemetryController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'status_operacional' => $dispositivo->status, // usado para a logica de reconexao
             'limites' => $limites
         ], 200);
     }

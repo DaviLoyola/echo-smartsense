@@ -24,6 +24,11 @@ class EventoDecisao extends Model
         'momento_evento'
     ];
 
+    // garante que a data seja uma instancia do carbon
+    protected $casts = [
+        'momento_evento' => 'datetime',
+    ];
+
     // dispositivo que gerou o evento
     public function dispositivo()
     {

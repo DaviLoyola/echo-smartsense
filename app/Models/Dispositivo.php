@@ -22,6 +22,10 @@ class Dispositivo extends Model
         'usuario_id'
     ];
 
+    protected $casts = [
+        'ultima_comunicacao' => 'datetime',
+    ];
+
     // leituras enviadas por este dispositivo
     public function leituras()
     {
