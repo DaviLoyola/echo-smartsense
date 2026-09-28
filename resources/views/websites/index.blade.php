@@ -17,9 +17,9 @@
         <img src="/assets/img/Logo.png" alt="ECHO Logo" class="logo-img">
     </div>
     <nav>
-        <a href="/dispositivos" class="nav-link">Painel Geral</a>
-        <a href="/relatorios" class="nav-link">Relatórios</a>
-        <a href="/config" class="nav-link">Configurações</a>
+        <a href="/dispositivos" class="nav-link {{ request()->routeIs('dispositivos.*') ? 'active' : '' }}">Painel Geral</a>
+        <a href="/relatorios" class="nav-link {{ request()->routeIs('relatorios.*') ? 'active' : '' }}">Relatórios</a>
+        <a href="/config" class="nav-link {{ request()->routeIs('config.*') ? 'active' : '' }}">Configurações</a>
     </nav>
     
     @if(auth()->check() && auth()->user()->role === 'admin')
