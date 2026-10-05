@@ -67,7 +67,8 @@ class TelemetryController extends Controller
             'tensao_fase_a'       => $leituras['tensao_fase_a'] ?? null,
             'tensao_fase_b'       => $leituras['tensao_fase_b'] ?? null,
             'tensao_fase_c'       => $leituras['tensao_fase_c'] ?? null,
-            'status_dps'          => $leituras['status_dps'] ?? null,
+            // a coluna e BOOLEAN no postgres: converte 0/1 para false/true (senao o insert falha)
+            'status_dps'          => isset($leituras['status_dps']) ? (bool) $leituras['status_dps'] : null,
             'pressao_linear'      => $leituras['pressao_linear'] ?? null,
             'pressao_diferencial' => $leituras['pressao_diferencial'] ?? null,
             'momento_leitura'     => now(),
@@ -97,7 +98,7 @@ class TelemetryController extends Controller
                     'dispositivo_id'    => $dispositivo->id,
                     'tipo_evento'       => $dadosValidados['status'],
                     'grandeza_acionada' => $grandezaAtual,
-                    'valor_medido'      => $leituras[$grandezaAtual] ?? 0,
+                    'valor_medido'      => (float) ($leituras[$grandezaAtual] ?? 0), // (float) pois status_dps e booleano
                     'valor_limite'      => $dadosValidados['valor_limite'] ?? 0,
                     'acao_tomada'       => $dadosValidados['acao_tomada'] ?? 'nenhuma',
                     'motivo'            => $dadosValidados['motivo'] ?? null,
